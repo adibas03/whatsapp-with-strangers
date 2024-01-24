@@ -1,16 +1,16 @@
 <app>
   <router on-started={onRouterStarted} base={props.base} initial-route={props.initialRoute}>
+    <header>
+      <img width="60" height="60" src="./src/images/phone.png" alt="Phone Logo"/>
+      +
+      <img width="75" height="76" src="./src/images/whatsapp.png" alt="Whatsapp Logo"/>
+    </header>
+    
     <nav>
       <a each={page in getPages()} class={getLinkClass(page.path)} href={page.path}>
         {page.label}
       </a>
     </nav>
-
-    <header>
-      <img width="111" height="116" src="https://riot.js.org/img/logo/square.svg" alt="Riot.js Logo"/>
-      🚀
-      <img width="110" height="110" src="https://upload.wikimedia.org/wikipedia/commons/8/84/Deno.svg" alt="Deno Logo"/>
-    </header>
 
     <not-found if={state.showNotFound}/>
 
@@ -126,7 +126,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 1.2rem 1rem 1rem;
+      padding: 0.2rem 1rem 0.5rem;
       margin: 1rem 0;
       gap: 2rem;
     }
@@ -146,6 +146,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 0rem 1rem 1.4rem;
     }
 
     a {

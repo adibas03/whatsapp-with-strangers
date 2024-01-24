@@ -6,7 +6,7 @@ export default {
   },
   ABOUT: {
     path: '/about',
-    label: 'What\'s Deno?',
+    label: 'What\'s Whatapp with Stangers?',
     component: 'about'
   }
 }
