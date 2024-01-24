@@ -55,6 +55,7 @@
     "@riotjs/hydrate": "^9.0.0",
     "@riotjs/route": "^9.1.2",
     "@riotjs/ssr": "^9.0.0",
+    "country-codes-list": "^1.6.11",
     "erre": "^3.0.1",
     "riot": "^9.1.2"
   }
