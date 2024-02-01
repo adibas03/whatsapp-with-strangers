@@ -1,5 +1,84 @@
 <home>
-  <h1>Hello <b>Deno</b> :)</h1>
-  <p>Did you know that Riot.js components can be rendered also by Deno?<br/>
-  What a great news!</p>
+  <h1>Hello <b>Stranger,</b></h1>
+  <p>Chat with any number without adding the number to your contacts!</p>
+  <div>
+    <form onsubmit={ chatNow }>
+      <p>
+        <select name="countryCode">
+          <option each={cc in Object.entries(state.codes)} value={cc[1]} >
+            <span class="name">
+              {cc[0]}
+            </span>
+            <span>
+            {" "}({cc[1]})
+            </span>
+          </option>
+        </select>
+        <input value={state.activeNumber} onchange={phoneNumbeChange} type="tel" pattern="[0-9]{10}" placeholder="8022352820" required/>
+      </p>
+      <p class="button">
+        <button> Chat Now </button>
+      </p>
+    </form>
+  </div>
+  {state.activeCountry}
+
+  <script>
+    import countryCodes from 'country-codes-list'
+
+    export default {
+      state: {
+        codes: countryCodes.customList('countryNameEn', '+{countryCallingCode}'),
+        activeCountry: "",
+        activeNumber: "",
+        history: []
+      },
+      onMounted() {
+        //this.state.codes.each(console.log)
+      },
+      phoneNumbeChange(p) {
+        this.update({
+         activeNumber: p.target.value
+        })
+      },
+      chatNow(e) {
+        e.preventDefault()
+        console.log(e)
+        console.log(this.state)
+      }
+    }
+  </script>
+
+  <style>
+    select {
+      display: inline;
+      width: 8.8em;
+      margin-right: 0.5em;
+      padding: 0.14em 0.1em;
+      font-size: 0.7em;
+    }
+
+    select option {
+    }
+
+    select option span.name {
+      text-overflow: ellipsis;
+    }
+
+    input {
+      margin-top: 0.5em;
+      line-height: 1.17em;
+      width: 10em;
+      font-size: 0.8em;
+    }
+
+    p.button {
+      margin-top: 1em;
+    }
+
+    button {
+      font-size: 0.7em;
+    }
+
+  </style>
 </home>

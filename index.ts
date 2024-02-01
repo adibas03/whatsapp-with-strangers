@@ -14,6 +14,7 @@ app.use(async (ctx, next) => {
   // quick test to identify static assets
   if (ctx.request.url.pathname.includes(".")) return next();
 
+  
   // generate the initial state
   const initialState = {
     initialRoute: ctx.request.url.pathname,

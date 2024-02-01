@@ -10,12 +10,13 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "npm run build && deno run --import-map=import_map.json --no-check=remote --allow-net --watch --allow-read index.ts",
+    "start": "deno run --import-map=import_map.json --no-check=remote --allow-net --watch --allow-read index.ts",
     "clean": "rm -rf public/*",
     "build-browser": "rollup -c rollup.browser-config.js",
     "build-server": "rollup -c rollup.server-config.js",
     "build": "npm run clean && npm run build-browser && npm run build-server",
-    "watch": "rollup  -w -c rollup.browser-config.js",
+    "build-and-start": "npm run build && npm run start",
+    "watch": "rollup  -w -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
