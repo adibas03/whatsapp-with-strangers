@@ -4,52 +4,115 @@
   <div>
     <form onsubmit={ chatNow }>
       <p>
-        <select name="countryCode">
+        <select name="countryCode" value={state.activeCountry} onchange={countryChange}>
           <option each={cc in Object.entries(state.codes)} value={cc[1]} >
             <span class="name">
               {cc[0]}
             </span>
             <span>
-            {" "}({cc[1]})
+            {" "}(+{cc[1]})
             </span>
           </option>
         </select>
-        <input value={state.activeNumber} onchange={phoneNumbeChange} type="tel" pattern="[0-9]{10}" placeholder="8022352820" required/>
+        <input value={state.activeNumber} onkeypress={numberOnly} onchange={phoneNumbeChange} type="tel" pattern="[0-9]+" minlength="10" maxlength="11" placeholder="xxxxxxxxxx" required/>
       </p>
       <p class="button">
         <button> Chat Now </button>
       </p>
     </form>
   </div>
-  {state.activeCountry}
+  <div class="history">
+    <h3>Previous Chats</h3>
+    <p each={h in state.history}>
+      <a href="{Object.values(h)[0]}" title="{Object.keys(h)[0]}" target="_blank">
+        {Object.keys(h)[0]}
+      </a>
+    </p>
+
+    <p if={state.history.length === 0}>
+      No history yet.
+    </p>
+
+  </div>
 
   <script>
-    import countryCodes from 'country-codes-list'
+    import countryCodes from "country-codes-list";
 
     export default {
       state: {
-        codes: countryCodes.customList('countryNameEn', '+{countryCallingCode}'),
+        codes: countryCodes.customList("countryNameEn", "{countryCallingCode}"),
         activeCountry: "",
         activeNumber: "",
-        history: []
+        appPresent: false,
+        history: [],
       },
       onMounted() {
         //this.state.codes.each(console.log)
+        this.update({
+          activeCountry: Object.values(this.state.codes)[0],
+        });
+      },
+      numberOnly(e) {
+        return new RegExp(/[0-9]/).test(e.key);
       },
       phoneNumbeChange(p) {
         this.update({
-         activeNumber: p.target.value
-        })
+          activeNumber: p.target.value,
+        });
+      },
+      countryChange(e) {
+        this.update({
+          activeCountry: e.target.value,
+        });
       },
       chatNow(e) {
-        e.preventDefault()
-        console.log(e)
-        console.log(this.state)
-      }
-    }
+        e.preventDefault();
+        console.log(e);
+        console.log(this.state);
+
+        const api =
+          "https://api.whatsapp.com/send/?phone=[n]&text&type=phone_number&app_absent=[a]";
+        const n = `${this.state.activeCountry}${this.state.activeNumber.replace(
+          this.state.activeNumber.length > 10 ? new RegExp(/^0/) : "",
+          ""
+        )}`;
+        const a = this.state.appPresent ? 0 : 1;
+        const apid = api.replace("[n]", n).replace("[a]", a);
+
+        console.log("apid", apid, n);
+
+        if (this.state.history.length > 0) {
+          if (this.state.history.find((hist) => Object.keys(hist).includes(n))) {
+            return false;
+          }
+        }
+
+        this.update({
+          history: this.state.history.concat([
+            {
+              [n]: apid,
+            },
+          ]),
+        });
+
+        window.open(apid, "_blank");
+      },
+    };
   </script>
 
   <style>
+    div.history {
+      margin-top: 2em;
+    }
+
+    div.history h3 {
+      margin-bottom: 1.2em;
+    }
+
+    div.history p {
+      font-size: 0.8em;
+    }
+
     select {
       display: inline;
       width: 8.8em;
