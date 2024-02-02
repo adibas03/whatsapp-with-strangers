@@ -15,6 +15,12 @@
           </option>
         </select>
         <input value={state.activeNumber} onkeypress={numberOnly} onchange={phoneNumbeChange} type="tel" pattern="[0-9]+" minlength="10" maxlength="11" placeholder="xxxxxxxxxx" required/>
+        <p class="app">
+          <input id="appPresent" value={state.appPresent} onchange={appPresentChange} type="checkbox" />
+          <label for="appPresent"> 
+            Do you have Whatsapp installed?
+          </label>
+        </p>
       </p>
       <p class="button">
         <button> Chat Now </button>
@@ -65,10 +71,13 @@
           activeCountry: e.target.value,
         });
       },
+      appPresentChange(e) {
+        this.update({
+          appPresent: !this.state.appPresent,
+        });
+      },
       chatNow(e) {
         e.preventDefault();
-        console.log(e);
-        console.log(this.state);
 
         const api =
           "https://api.whatsapp.com/send/?phone=[n]&text&type=phone_number&app_absent=[a]";
@@ -79,21 +88,42 @@
         const a = this.state.appPresent ? 0 : 1;
         const apid = api.replace("[n]", n).replace("[a]", a);
 
-        console.log("apid", apid, n);
-
         if (this.state.history.length > 0) {
-          if (this.state.history.find((hist) => Object.keys(hist).includes(n))) {
-            return false;
-          }
-        }
+          const findIndex = this.state.history.findIndex((hist) =>
+            Object.keys(hist).includes(n)
+          );
 
-        this.update({
-          history: this.state.history.concat([
-            {
-              [n]: apid,
-            },
-          ]),
-        });
+          if (findIndex > -1) {
+            if (Object.values(this.state.history[findIndex]).includes(apid)) {
+              // skip
+            } else {
+              const history = this.state.history;
+              history.splice(findIndex, 1, {
+                [n]: apid,
+              });
+
+              this.update({
+                history,
+              });
+            }
+          } else {
+            this.update({
+              history: this.state.history.concat([
+                {
+                  [n]: apid,
+                },
+              ]),
+            });
+          }
+        } else {
+          this.update({
+            history: this.state.history.concat([
+              {
+                [n]: apid,
+              },
+            ]),
+          });
+        }
 
         window.open(apid, "_blank");
       },
@@ -101,16 +131,12 @@
   </script>
 
   <style>
+    div p.app {
+      font-size: 0.8em;
+    }
+
     div.history {
       margin-top: 2em;
-    }
-
-    div.history h3 {
-      margin-bottom: 1.2em;
-    }
-
-    div.history p {
-      font-size: 0.8em;
     }
 
     select {
@@ -135,12 +161,25 @@
       font-size: 0.8em;
     }
 
+    div p.app input {
+      margin: 0.1em 0.2em 0;
+      width: auto;
+    }
+
     p.button {
       margin-top: 1em;
     }
 
     button {
       font-size: 0.7em;
+    }
+
+    div.history h3 {
+      margin-bottom: 1.2em;
+    }
+
+    div.history p {
+      font-size: 0.8em;
     }
 
   </style>
