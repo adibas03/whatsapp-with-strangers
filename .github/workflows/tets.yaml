@@ -1,0 +1,36 @@
+name: Test
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '^16'
+
+      - name: npm install
+        env:
+          CI: true
+        run: |
+          npm install
+          npm ci
+
+      - name: Build
+        if: github.base_ref != 'master' && github.base_ref != 'staging'
+        run: |
+          export NODE_OPTIONS=--max_old_space_size=8192
+          npm run build
+
+      - name: Simple deploy with git
+        uses: rdarida/simple-github-pages-deploy-action@v1
+        with: # optional
+          git-base-folder: 'public'
+          branch: 'gh-pages'
