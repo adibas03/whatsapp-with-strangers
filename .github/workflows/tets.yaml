@@ -31,8 +31,8 @@ jobs:
           export NODE_OPTIONS=--max_old_space_size=8192
           npm run build
 
-      - name: Simple deploy with git
-        uses: rdarida/simple-github-pages-deploy-action@v1
-        with: # optional
-          git-base-folder: 'public'
-          branch: 'gh-pages'
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./public
