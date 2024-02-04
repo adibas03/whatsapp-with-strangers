@@ -22,7 +22,7 @@ jobs:
         env:
           CI: true
         run: |
-          npm i -g deno
+          npm i deno
           npm install
           npm ci
 
