@@ -1,6 +1,6 @@
 export default {
-    scheme: "http",
-    host: "127.0.0.1:1122",
+    scheme: "https",
+    host: "adibas03.github.io/whatsapp-with-strangers/",
     outDir: "dist",
     include: ['public', 'src/images' ],
 }
