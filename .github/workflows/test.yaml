@@ -31,7 +31,6 @@ jobs:
           npm ci
 
       - name: Build
-        if: github.base_ref != 'master' && github.base_ref != 'staging'
         run: |
           export NODE_OPTIONS=--max_old_space_size=8192
           npm run build
@@ -44,4 +43,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./dist
