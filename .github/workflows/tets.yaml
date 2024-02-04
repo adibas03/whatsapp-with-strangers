@@ -21,8 +21,8 @@ jobs:
       - name: Setup Deno
         run: |
           curl -fsSL https://deno.land/install.sh | sh
-          echo 'export DENO_INSTALL="/home/runner/.deno"' >> GITHUB_PATH
-          echo 'export PATH="$DENO_INSTALL/bin:$PATH""' >> GITHUB_PATH
+          echo 'export DENO_INSTALL="/home/runner/.deno"' >> "$GITHUB_PATH"
+          echo 'export PATH="$DENO_INSTALL/bin:$PATH""' >> "$GITHUB_PATH"
 
       - name: npm install
         env:
