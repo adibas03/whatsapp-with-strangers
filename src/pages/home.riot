@@ -2,9 +2,9 @@
   <h1>Hello <b>Stranger,</b></h1>
   <p>Chat with any number without adding the number to your contacts!</p>
   <div>
-    <form onsubmit={ chatNow }>
+    <form if={Object.keys(state.codes).length > 0}  onsubmit={ chatNow }>
       <p>
-        <select name="countryCode" value={state.activeCountry} onchange={countryChange}>
+        <select if={Object.keys(state.codes).length > 0} name="countryCode" value={state.activeCountry} onchange={countryChange}>
           <option each={cc in Object.entries(state.codes)} value={cc[1]} >
             <span class="name">
               {cc[0]}
@@ -28,7 +28,7 @@
     </form>
   </div>
   <div class="history">
-    <h3>Previous Chats</h3>
+    <h3>Previous Chats ({state.history.length})</h3>
     <p each={h in state.history}>
       <a href="{Object.values(h)[0]}" title="{Object.keys(h)[0]}" target="_blank">
         {Object.keys(h)[0]}
