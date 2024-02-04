@@ -1,5 +1,0 @@
-{
-  "imports": {
-    "@riotjs/ssr": "./node_modules/@riotjs/ssr/index.js"
-  }
-}
