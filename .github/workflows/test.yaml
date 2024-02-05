@@ -35,13 +35,16 @@ jobs:
         env:
           CI: true
         run: |
-          npm install
-          npm i -f
+          npm i
+          npm i
 
       - name: Build
         run: |
           export NODE_OPTIONS=--max_old_space_size=8192
+          npm run start-deploy
+          npm i
           npm run build
+
 
       - name: Build gh-pages
         run: |

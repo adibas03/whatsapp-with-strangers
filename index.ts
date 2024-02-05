@@ -59,4 +59,8 @@ app.use(async (context, next) => {
 if(!forDeploy){
   console.log("App running on: http://localhost:3000");
   await app.listen({ port: 3000 });
+
+} else {
+
+  console.log("App build ready");
 }

@@ -10,7 +10,6 @@ import routes from "./src/routes.ts";
 const app = new Application();
 const page = await Deno.readTextFile("./index.html");
 
-const denoDir = `${Deno.cwd()}`;
 
 // generate the initial state
 const initialState = {
@@ -20,7 +19,7 @@ const initialState = {
 };
 
 // generate the rendered html + css
-const { html, css, ...odas } = await renderAsyncFragments(
+const { html, css } = await renderAsyncFragments(
   "app",
   RootComponent,
   initialState
@@ -37,6 +36,7 @@ const encoder = new TextEncoder();
 const data = encoder.encode(parsedHtml);
 
 await emptyDir(deployConfig.outDir);
+console.log(`Empty ${deployConfig.outDir} folder`)
 
 const file = await Deno.open(`${deployConfig.outDir}/index.html`, {
   create: true,

@@ -10,8 +10,9 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "runnow": "deno run --import-map=import_map.json --no-check=remote --allow-net --allow-read --allow-env index.ts",
-    "start": "npm run runnow --watch",
+    "runnow": "deno run --import-map=import_map.json --no-check=remote --allow-net --allow-read --allow-env",
+    "start": "npm run runnow -- --watch  index.ts",
+    "start-deploy": "FOR_DEPLOY=true npm run runnow -- index.ts",
     "deploy": "deno run --import-map=import_map.json --no-check=remote --allow-net --allow-read --allow-write index.deploy.ts",
     "clean": "rm -rf public/*",
     "build-browser": "rollup -c rollup.browser-config.js",
