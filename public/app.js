@@ -4,7 +4,7 @@ import countryCodes from 'country-codes-list';
 import { Router, Route, route, match, toRegexp } from '@riotjs/route';
 
 var Home = {
-  css: `home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
+  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
 
   exports: {
     state: {
@@ -101,7 +101,7 @@ var Home = {
     bindingTypes,
     getComponent
   ) => template(
-    '<h1>Hello <b>Stranger,</b></h1><p>Chat with any number without adding the number to your contacts!</p><div><form expr5="expr5"></form></div><div class="history"><h3 expr12="expr12"> </h3><p expr13="expr13"></p><p expr15="expr15"></p></div>',
+    '<h2>Hello <b>Stranger,</b></h2><p>\n    Chat with anyone on Whatsapp without saving the number to your contacts! <br/><span>\n      Ever had to chat with a number on whatsapp just once; perhaps to send some \n      information across or to complete some process? <br/>\n      Now you can, without saving the number as a contact.\n      </span></p><div><form expr5="expr5"></form></div><div class="history"><h3 expr12="expr12"> </h3><p expr13="expr13"></p><p expr15="expr15"></p></div>',
     [
       {
         type: bindingTypes.IF,
@@ -345,7 +345,7 @@ var routes = {
     },
     ABOUT: {
         path: '/about',
-        label: 'What\'s Whatapp with Stangers?',
+        label: 'What\'s Whatsapp with Stangers?',
         component: 'about'
     }
 };
