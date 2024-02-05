@@ -41,13 +41,13 @@ jobs:
       - name: Build
         run: |
           export NODE_OPTIONS=--max_old_space_size=8192
+          npm run build
           npm run start-deploy
           npm i
-          npm run build
-
 
       - name: Build gh-pages
         run: |
+          npm run build
           npm run deploy
 
       - name: Deploy
