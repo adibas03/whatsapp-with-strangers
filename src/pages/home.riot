@@ -1,6 +1,13 @@
 <home>
-  <h1>Hello <b>Stranger,</b></h1>
-  <p>Chat with any number without adding the number to your contacts!</p>
+  <h2>Hello <b>Stranger,</b></h2>
+  <p>
+    Chat with anyone on Whatsapp without saving the number to your contacts! <br/>
+    <span>
+      Ever had to chat with a number on whatsapp just once; perhaps to send some 
+      information across or to complete some process? <br/>
+      Now you can, without saving the number as a contact.
+      </span>
+  </p>
   <div>
     <form if={Object.keys(state.codes).length > 0}  onsubmit={ chatNow }>
       <p>
@@ -131,6 +138,13 @@
   </script>
 
   <style>
+    p span {
+      font-size: 0.6em;
+      max-width: 75%;
+      margin: 0.6em auto 2em;
+      display: block;
+    }
+
     div p.app {
       font-size: 0.8em;
     }

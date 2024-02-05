@@ -6,7 +6,7 @@ export default {
   },
   ABOUT: {
     path: '/about',
-    label: 'What\'s Whatapp with Stangers?',
+    label: 'What\'s Whatsapp with Stangers?',
     component: 'about'
   }
 }
