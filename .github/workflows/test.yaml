@@ -23,6 +23,12 @@ jobs:
           curl -fsSL https://deno.land/install.sh | sh
           echo "$HOME/.deno/bin" >> $GITHUB_PATH
 
+      - name: Setup Nvm
+        run: |
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+          nvm install 16
+          nvm use 16
+
       - name: npm install
         env:
           CI: true
@@ -32,6 +38,7 @@ jobs:
 
       - name: Build
         run: |
+          echo "(node -v)"
           export NODE_OPTIONS=--max_old_space_size=8192
           npm run build
 
