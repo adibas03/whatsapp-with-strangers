@@ -27,7 +27,7 @@ jobs:
         env:
           CI: true
         run: |
-          npm install
+          npm i -f
           npm ci
 
       - name: Build
