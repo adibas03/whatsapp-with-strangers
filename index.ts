@@ -9,6 +9,7 @@ import { toRegexp, match } from "@riotjs/route";
 const app = new Application();
 const page = await Deno.readTextFile("./index.html");
 const pages = Object.values(routes);
+const forDeploy = Deno.env.get("FOR_DEPLOY")
 
 app.use(async (ctx, next) => {
   // quick test to identify static assets
@@ -55,6 +56,11 @@ app.use(async (context, next) => {
   }
 });
 
-console.log("App running on: http://localhost:3000");
+if(!forDeploy){
+  console.log("App running on: http://localhost:3000");
+  await app.listen({ port: 3000 });
 
-await app.listen({ port: 3000 });
+} else {
+
+  console.log("App build ready");
+}

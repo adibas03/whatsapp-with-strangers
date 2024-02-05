@@ -1,0 +1,57 @@
+name: Test
+
+on:
+  push:
+    branches: [master, workflow]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '^16'
+
+      - name: Setup Deno
+        run: |
+          curl -fsSL https://deno.land/install.sh | sh
+          echo "$HOME/.deno/bin" >> $GITHUB_PATH
+
+      - name: Setup Nvm
+        run: |
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+          [ -s "$HOME/.nvm/nvm.sh" ] && \. "$HOME/.nvm/nvm.sh"  # This loads nvm
+          [ -s "$HOME/.nvm/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+          nvm install 16
+          nvm use 16
+
+      - name: npm install
+        env:
+          CI: true
+        run: |
+          npm i
+          npm i
+
+      - name: Build
+        run: |
+          export NODE_OPTIONS=--max_old_space_size=8192
+          npm run build
+          npm run start-deploy
+          npm i
+
+      - name: Build gh-pages
+        run: |
+          npm run build
+          npm run deploy
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./dist
