@@ -1,21 +1,28 @@
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Whatsapp with Strangers</title>
-  <meta name="description" content="WhatsApp chat without saving the number. You can open in the app or the browser. Have a better time chatting with people one-off (For academic purposes only).">
-  <link rel="stylesheet" href="https://unpkg.com/modern-css-reset/dist/reset.min.css" />
-  <style riot>
-    <%= css %>
-  </style>
-</head>
-<body>
-  <%= html %>
-  <script>
-    window.__INITIAL_STATE__ = <%= initialState %>
-  </script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whatsapp with Strangers</title>
+    <meta
+      name="description"
+      content="WhatsApp chat without saving the number. You can open in the app or the browser. Have a better time chatting with people one-off (For academic purposes only)."
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/modern-css-reset/dist/reset.min.css"
+    />
+    <style riot>
+      <%= css %>
+    </style>
+  </head>
+  <body>
+    <%= html %>
+    <script>
+      window.__INITIAL_STATE__ = <%= initialState %>
+    </script>
 
-  <script type="module">
-    import './public/main.js'
-  </script>
-</body>
+    <script type="module">
+      import "./public/main.js";
+    </script>
+  </body>
 </html>
