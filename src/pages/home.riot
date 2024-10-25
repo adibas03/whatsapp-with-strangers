@@ -50,6 +50,7 @@
 
   <script>
     import countryCodes from "country-codes-list";
+    import timezonedb from "timezonedb";
 
     export default {
       state: {
@@ -64,6 +65,8 @@
         this.update({
           activeCountry: Object.values(this.state.codes)[0],
         });
+
+        console.log(timezonedb)
       },
       numberOnly(e) {
         return new RegExp(/[0-9]/).test(e.key);
