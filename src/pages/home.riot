@@ -12,7 +12,8 @@
     <form if={Object.keys(state.codes).length > 0}  onsubmit={ chatNow }>
       <p>
         <select if={Object.keys(state.codes).length > 0} name="countryCode" value={state.activeCountry} onchange={countryChange}>
-          <option each={cc in Object.entries(state.codes)} value={cc[1]} >
+          <option each={cc in Object.entries(state.codes)} value={cc[1]} {... state.activeCountry === cc[1] ? {selected: "selected"} : {}}
+          >
             <span class="name">
               {cc[0]}
             </span>
@@ -50,23 +51,32 @@
 
   <script>
     import countryCodes from "country-codes-list";
-    import timezonedb from "timezonedb";
+    import timezones from "../scripts/time_zones.js";
 
     export default {
       state: {
         codes: countryCodes.customList("countryNameEn", "{countryCallingCode}"),
+        countryCodes: countryCodes.customList("countryCode", "{countryNameEn}"),
         activeCountry: "",
         activeNumber: "",
         appPresent: false,
         history: [],
       },
       onMounted() {
-        //this.state.codes.each(console.log)
-        this.update({
-          activeCountry: Object.values(this.state.codes)[0],
-        });
 
-        console.log(timezonedb)
+        const tz = Intl.DateTimeFormat().resolvedOptions()
+        const country = timezones[tz.timeZone]
+        let activeCountry
+
+        if(country){
+          activeCountry = this.state.codes[this.state.countryCodes[country.country]]
+        } else {
+          activeCountry = Object.values(this.state.codes)[0]
+        }
+
+        this.update({
+          activeCountry
+        });
       },
       numberOnly(e) {
         return new RegExp(/[0-9]/).test(e.key);
@@ -98,6 +108,16 @@
         const a = this.state.appPresent ? 0 : 1;
         const apid = api.replace("[n]", n).replace("[a]", a);
 
+        const updateHistory = () => {
+          this.update({
+            history: this.state.history.concat([
+              {
+                [n]: apid,
+              },
+            ]),
+          });
+        }
+
         if (this.state.history.length > 0) {
           const findIndex = this.state.history.findIndex((hist) =>
             Object.keys(hist).includes(n)
@@ -117,22 +137,10 @@
               });
             }
           } else {
-            this.update({
-              history: this.state.history.concat([
-                {
-                  [n]: apid,
-                },
-              ]),
-            });
+            updateHistory();
           }
         } else {
-          this.update({
-            history: this.state.history.concat([
-              {
-                [n]: apid,
-              },
-            ]),
-          });
+          updateHistory();
         }
 
         window.open(apid, "_blank");
