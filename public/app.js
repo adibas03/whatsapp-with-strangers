@@ -1,42 +1,37 @@
 import { withTypes } from 'riot';
 import erre from 'erre';
 import countryCodes from 'country-codes-list';
-import { readFileSync } from 'https://deno.land/x/deno@v1.0.0/std/node/fs.ts';
+import * as fs from 'https://deno.land/x/deno@v1.0.4/std/node/fs.ts';
 import { Router, Route, route, match, toRegexp } from '@riotjs/route';
 
 const timezonePath = "src/data/time_zone.csv";
 let timezonedb;
-
 const timezones = async function () {
-  if (!timezonedb) {
-    timezonedb = await readFileSync(timezonePath, {
-      encoding: "utf8",
-      flag: "r",
-    }).toString();
-  }
-
-  const timezones = timezonedb.split(/\r\n|\n/).reduce((a, t) => {
-    const tz = t.split(",");
-    if (!tz[0]) {
-      return a;
+    if (!timezonedb) {
+        timezonedb = await fs.readFileSync(timezonePath, {
+            encoding: "utf8",
+            flag: "r",
+        }).toString();
     }
-
-    return {
-      ...a,
-      [tz[0]]: {
-        country: tz[1],
-        code: tz[2],
-      },
-    };
-  }, {});
-
-  return timezones;
+    const timezones = timezonedb.split(/\r\n|\n/).reduce((a, t) => {
+        const tz = t.split(",");
+        if (!tz[0]) {
+            return a;
+        }
+        return {
+            ...a,
+            [tz[0]]: {
+                country: tz[1],
+                code: tz[2],
+            },
+        };
+    }, {});
+    return timezones;
 };
-
 var timezones$1 = await timezones();
 
 var Home = {
-  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; }home div p.app,[is="home"] div p.app{ font-size: 0.8em; }home div.history,[is="home"] div.history{ margin-top: 2em; }home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; }home select option,[is="home"] select option{ }home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; }home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; }home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; }home p.button,[is="home"] p.button{ margin-top: 1em; }home button,[is="home"] button{ font-size: 0.7em; }home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; }home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
+  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
 
   exports: {
     state: {
@@ -142,16 +137,16 @@ var Home = {
     bindingTypes,
     getComponent
   ) => template(
-    '<h2>Hello <b>Stranger,</b></h2><p>\n    Chat with anyone on Whatsapp without saving the number to your contacts! <br/><span>\n      Ever had to chat with a number on whatsapp just once; perhaps to send some \n      information across or to complete some process? <br/>\n      Now you can, without saving the number as a contact.\n      </span></p><div><form expr6="expr6"></form></div><div class="history"><h3 expr13="expr13"> </h3><p expr14="expr14"></p><p expr16="expr16"></p></div>',
+    '<h2>Hello <b>Stranger,</b></h2><p>\n    Chat with anyone on Whatsapp without saving the number to your contacts! <br/><span>\n      Ever had to chat with a number on whatsapp just once; perhaps to send some \n      information across or to complete some process? <br/>\n      Now you can, without saving the number as a contact.\n      </span></p><div><form expr5="expr5"></form></div><div class="history"><h3 expr12="expr12"> </h3><p expr13="expr13"></p><p expr15="expr15"></p></div>',
     [
       {
         type: bindingTypes.IF,
         evaluate: _scope => Object.keys(_scope.state.codes).length > 0,
-        redundantAttribute: 'expr6',
-        selector: '[expr6]',
+        redundantAttribute: 'expr5',
+        selector: '[expr5]',
 
         template: template(
-          '<p><select expr7="expr7" name="countryCode"></select><input expr11="expr11" type="tel" pattern="[0-9]+" minlength="10" maxlength="11" placeholder="xxxxxxxxxx" required/><p class="app"><input expr12="expr12" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button> Chat Now </button></p>',
+          '<p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" type="tel" pattern="[0-9]+" minlength="10" maxlength="11" placeholder="xxxxxxxxxx" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button> Chat Now </button></p>',
           [
             {
               expressions: [
@@ -165,11 +160,11 @@ var Home = {
             {
               type: bindingTypes.IF,
               evaluate: _scope => Object.keys(_scope.state.codes).length > 0,
-              redundantAttribute: 'expr7',
-              selector: '[expr7]',
+              redundantAttribute: 'expr6',
+              selector: '[expr6]',
 
               template: template(
-                '<option expr8="expr8"></option>',
+                '<option expr7="expr7"></option>',
                 [
                   {
                     expressions: [
@@ -192,7 +187,7 @@ var Home = {
                     condition: null,
 
                     template: template(
-                      '<span expr9="expr9" class="name"> </span><span expr10="expr10"> </span>',
+                      '<span expr8="expr8" class="name"> </span><span expr9="expr9"> </span>',
                       [
                         {
                           expressions: [
@@ -211,8 +206,8 @@ var Home = {
                           ]
                         },
                         {
-                          redundantAttribute: 'expr9',
-                          selector: '[expr9]',
+                          redundantAttribute: 'expr8',
+                          selector: '[expr8]',
 
                           expressions: [
                             {
@@ -228,8 +223,8 @@ var Home = {
                           ]
                         },
                         {
-                          redundantAttribute: 'expr10',
-                          selector: '[expr10]',
+                          redundantAttribute: 'expr9',
+                          selector: '[expr9]',
 
                           expressions: [
                             {
@@ -250,8 +245,8 @@ var Home = {
                       ]
                     ),
 
-                    redundantAttribute: 'expr8',
-                    selector: '[expr8]',
+                    redundantAttribute: 'expr7',
+                    selector: '[expr7]',
                     itemName: 'cc',
                     indexName: null,
 
@@ -263,8 +258,8 @@ var Home = {
               )
             },
             {
-              redundantAttribute: 'expr11',
-              selector: '[expr11]',
+              redundantAttribute: 'expr10',
+              selector: '[expr10]',
 
               expressions: [
                 {
@@ -284,8 +279,8 @@ var Home = {
               ]
             },
             {
-              redundantAttribute: 'expr12',
-              selector: '[expr12]',
+              redundantAttribute: 'expr11',
+              selector: '[expr11]',
 
               expressions: [
                 {
@@ -303,8 +298,8 @@ var Home = {
         )
       },
       {
-        redundantAttribute: 'expr13',
-        selector: '[expr13]',
+        redundantAttribute: 'expr12',
+        selector: '[expr12]',
 
         expressions: [
           {
@@ -327,11 +322,11 @@ var Home = {
         condition: null,
 
         template: template(
-          '<a expr15="expr15" target="_blank"> </a>',
+          '<a expr14="expr14" target="_blank"> </a>',
           [
             {
-              redundantAttribute: 'expr15',
-              selector: '[expr15]',
+              redundantAttribute: 'expr14',
+              selector: '[expr14]',
 
               expressions: [
                 {
@@ -361,8 +356,8 @@ var Home = {
           ]
         ),
 
-        redundantAttribute: 'expr14',
-        selector: '[expr14]',
+        redundantAttribute: 'expr13',
+        selector: '[expr13]',
         itemName: 'h',
         indexName: null,
         evaluate: _scope => _scope.state.history
@@ -370,8 +365,8 @@ var Home = {
       {
         type: bindingTypes.IF,
         evaluate: _scope => _scope.state.history.length === 0,
-        redundantAttribute: 'expr16',
-        selector: '[expr16]',
+        redundantAttribute: 'expr15',
+        selector: '[expr15]',
 
         template: template(
           '\n      No history yet.\n    ',
@@ -412,11 +407,11 @@ var NotFound = {
     bindingTypes,
     getComponent
   ) => template(
-    '<h1>Page not found</h1><p>Opsi, wrong page. Go back to <a expr5="expr5"> </a> :(</p>',
+    '<h1>Page not found</h1><p>Opsi, wrong page. Go back to <a expr16="expr16"> </a> :(</p>',
     [
       {
-        redundantAttribute: 'expr5',
-        selector: '[expr5]',
+        redundantAttribute: 'expr16',
+        selector: '[expr16]',
 
         expressions: [
           {
@@ -456,7 +451,7 @@ var About = {
 };
 
 var app = {
-  css: `app,[is="app"]{ --primary-color: rgba(96, 165, 254, 1); --background-color: aliceblue; --light-gray: #f4f4f4; font-family: ui-sans-serif, system-ui, sans-serif; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; margin: 0 auto; padding: 2rem 1rem 1rem; min-height: 100vh; text-align: center; background-color: var(--background-color); }app h1,[is="app"] h1{ font-weight: 300; font-size: 1.6rem; margin-bottom: 1.2rem; }app h1 b,[is="app"] h1 b{ font-weight: bold; }app header,[is="app"] header{ display: flex; justify-content: center; align-items: center; padding: 0.2rem 1rem 0.5rem; margin: 1rem 0; gap: 2rem; }app main,[is="app"] main{ margin: 0 auto; max-width: 600px; min-height: 200px; }app main p,[is="app"] main p{ line-height: 1.6; margin-bottom: 1rem; }app nav,[is="app"] nav{ display: flex; align-items: center; justify-content: center; padding: 0rem 1rem 1.4rem; }app a,[is="app"] a{ color: var(--primary-color); text-decoration: none; }app a:focus,[is="app"] a:focus,app a:active,[is="app"] a:active,app a:hover,[is="app"] a:hover{ opacity: 0.7; }app nav a,[is="app"] nav a{ padding: 0 0.4rem; }app nav a.active,[is="app"] nav a.active{ text-decoration: underline; pointer-events: none; }`,
+  css: `app,[is="app"]{ --primary-color: rgba(96, 165, 254, 1); --background-color: aliceblue; --light-gray: #f4f4f4; font-family: ui-sans-serif, system-ui, sans-serif; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; margin: 0 auto; padding: 2rem 1rem 1rem; min-height: 100vh; text-align: center; background-color: var(--background-color); } app h1,[is="app"] h1{ font-weight: 300; font-size: 1.6rem; margin-bottom: 1.2rem; } app h1 b,[is="app"] h1 b{ font-weight: bold; } app header,[is="app"] header{ display: flex; justify-content: center; align-items: center; padding: 0.2rem 1rem 0.5rem; margin: 1rem 0; gap: 2rem; } app main,[is="app"] main{ margin: 0 auto; max-width: 600px; min-height: 200px; } app main p,[is="app"] main p{ line-height: 1.6; margin-bottom: 1rem; } app nav,[is="app"] nav{ display: flex; align-items: center; justify-content: center; padding: 0rem 1rem 1.4rem; } app a,[is="app"] a{ color: var(--primary-color); text-decoration: none; } app a:focus,[is="app"] a:focus,app a:active,[is="app"] a:active,app a:hover,[is="app"] a:hover{ opacity: 0.7; } app nav a,[is="app"] nav a{ padding: 0 0.4rem; } app nav a.active,[is="app"] nav a.active{ text-decoration: underline; pointer-events: none; }`,
 
   exports: withTypes(
     {

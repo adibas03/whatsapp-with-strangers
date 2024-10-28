@@ -1,4 +1,4 @@
-import { readFileSync } from 'https://deno.land/x/deno@v1.0.0/std/node/fs.ts';
+import * as fs from 'https://deno.land/x/deno@v1.0.4/std/node/fs.ts';
 
 /* Riot WIP, @license MIT */
 // Riot.js constants that can be used across more modules
@@ -7038,37 +7038,32 @@ var countryCodes = /*@__PURE__*/getDefaultExportFromCjs(countryCodesList);
 
 const timezonePath = "src/data/time_zone.csv";
 let timezonedb;
-
 const timezones = async function () {
-  if (!timezonedb) {
-    timezonedb = await readFileSync(timezonePath, {
-      encoding: "utf8",
-      flag: "r",
-    }).toString();
-  }
-
-  const timezones = timezonedb.split(/\r\n|\n/).reduce((a, t) => {
-    const tz = t.split(",");
-    if (!tz[0]) {
-      return a;
+    if (!timezonedb) {
+        timezonedb = await fs.readFileSync(timezonePath, {
+            encoding: "utf8",
+            flag: "r",
+        }).toString();
     }
-
-    return {
-      ...a,
-      [tz[0]]: {
-        country: tz[1],
-        code: tz[2],
-      },
-    };
-  }, {});
-
-  return timezones;
+    const timezones = timezonedb.split(/\r\n|\n/).reduce((a, t) => {
+        const tz = t.split(",");
+        if (!tz[0]) {
+            return a;
+        }
+        return {
+            ...a,
+            [tz[0]]: {
+                country: tz[1],
+                code: tz[2],
+            },
+        };
+    }, {});
+    return timezones;
 };
-
 var timezones$1 = await timezones();
 
 var Home = {
-  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; }home div p.app,[is="home"] div p.app{ font-size: 0.8em; }home div.history,[is="home"] div.history{ margin-top: 2em; }home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; }home select option,[is="home"] select option{ }home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; }home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; }home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; }home p.button,[is="home"] p.button{ margin-top: 1em; }home button,[is="home"] button{ font-size: 0.7em; }home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; }home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
+  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
 
   exports: {
     state: {
@@ -8796,7 +8791,7 @@ var routerHoc = {
 };
 
 var App = {
-  css: `app,[is="app"]{ --primary-color: rgba(96, 165, 254, 1); --background-color: aliceblue; --light-gray: #f4f4f4; font-family: ui-sans-serif, system-ui, sans-serif; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; margin: 0 auto; padding: 2rem 1rem 1rem; min-height: 100vh; text-align: center; background-color: var(--background-color); }app h1,[is="app"] h1{ font-weight: 300; font-size: 1.6rem; margin-bottom: 1.2rem; }app h1 b,[is="app"] h1 b{ font-weight: bold; }app header,[is="app"] header{ display: flex; justify-content: center; align-items: center; padding: 0.2rem 1rem 0.5rem; margin: 1rem 0; gap: 2rem; }app main,[is="app"] main{ margin: 0 auto; max-width: 600px; min-height: 200px; }app main p,[is="app"] main p{ line-height: 1.6; margin-bottom: 1rem; }app nav,[is="app"] nav{ display: flex; align-items: center; justify-content: center; padding: 0rem 1rem 1.4rem; }app a,[is="app"] a{ color: var(--primary-color); text-decoration: none; }app a:focus,[is="app"] a:focus,app a:active,[is="app"] a:active,app a:hover,[is="app"] a:hover{ opacity: 0.7; }app nav a,[is="app"] nav a{ padding: 0 0.4rem; }app nav a.active,[is="app"] nav a.active{ text-decoration: underline; pointer-events: none; }`,
+  css: `app,[is="app"]{ --primary-color: rgba(96, 165, 254, 1); --background-color: aliceblue; --light-gray: #f4f4f4; font-family: ui-sans-serif, system-ui, sans-serif; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; margin: 0 auto; padding: 2rem 1rem 1rem; min-height: 100vh; text-align: center; background-color: var(--background-color); } app h1,[is="app"] h1{ font-weight: 300; font-size: 1.6rem; margin-bottom: 1.2rem; } app h1 b,[is="app"] h1 b{ font-weight: bold; } app header,[is="app"] header{ display: flex; justify-content: center; align-items: center; padding: 0.2rem 1rem 0.5rem; margin: 1rem 0; gap: 2rem; } app main,[is="app"] main{ margin: 0 auto; max-width: 600px; min-height: 200px; } app main p,[is="app"] main p{ line-height: 1.6; margin-bottom: 1rem; } app nav,[is="app"] nav{ display: flex; align-items: center; justify-content: center; padding: 0rem 1rem 1.4rem; } app a,[is="app"] a{ color: var(--primary-color); text-decoration: none; } app a:focus,[is="app"] a:focus,app a:active,[is="app"] a:active,app a:hover,[is="app"] a:hover{ opacity: 0.7; } app nav a,[is="app"] nav a{ padding: 0 0.4rem; } app nav a.active,[is="app"] nav a.active{ text-decoration: underline; pointer-events: none; }`,
 
   exports: withTypes(
     {
