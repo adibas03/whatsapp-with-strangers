@@ -2,7 +2,6 @@ import { Application } from "https://deno.land/x/oak@v10.5.1/mod.ts";
 import { template } from "https://cdn.pika.dev/lodash-es";
 import { renderAsyncFragments } from "@riotjs/ssr";
 import RootComponent from "./public/app.js";
-import importMap from "./import_map.json" assert { type: "json" };
 import routes from "./src/routes.ts";
 import { toRegexp, match } from "@riotjs/route";
 
@@ -15,7 +14,7 @@ app.use(async (ctx, next) => {
   // quick test to identify static assets
   if (ctx.request.url.pathname.includes(".")) return next();
 
-  
+
   // generate the initial state
   const initialState = {
     initialRoute: ctx.request.url.pathname,
@@ -56,7 +55,7 @@ app.use(async (context, next) => {
   }
 });
 
-if(!forDeploy){
+if (!forDeploy) {
   console.log("App running on: http://localhost:3000");
   await app.listen({ port: 3000 });
 
