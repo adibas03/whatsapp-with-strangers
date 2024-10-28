@@ -1,9 +1,14 @@
+import { readFileSync } from "https://deno.land/x/deno@v1.0.0/std/node/fs.ts";
+
 const timezonePath = "src/data/time_zone.csv";
 let timezonedb;
 
 const timezones = async function () {
   if (!timezonedb) {
-    timezonedb = await Deno.readTextFile(timezonePath);
+    timezonedb = await readFileSync(timezonePath, {
+      encoding: "utf8",
+      flag: "r",
+    }).toString();
   }
 
   const timezones = timezonedb.split(/\r\n|\n/).reduce((a, t) => {
