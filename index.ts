@@ -1,4 +1,4 @@
-import { Application } from "https://deno.land/x/oak@v10.5.1/mod.ts";
+import { Application } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { template } from "https://cdn.pika.dev/lodash-es";
 import { renderAsyncFragments } from "@riotjs/ssr";
 import RootComponent from "./public/app.js";

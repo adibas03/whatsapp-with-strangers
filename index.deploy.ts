@@ -1,6 +1,6 @@
-import { Application } from "https://deno.land/x/oak@v10.5.1/mod.ts";
-import { copy } from "https://deno.land/std@0.214.0/fs/copy.ts";
-import { emptyDir } from "https://deno.land/std@0.214.0/fs/empty_dir.ts";
+import { Application } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { copy } from "https://deno.land/std@0.223.0/fs/copy.ts";
+import { emptyDir } from "https://deno.land/std@0.223.0/fs/empty_dir.ts";
 import { template } from "https://cdn.pika.dev/lodash-es";
 import { renderAsyncFragments } from "@riotjs/ssr";
 import deployConfig from "./riot.deploy-config.js";

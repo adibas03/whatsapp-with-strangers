@@ -42,19 +42,12 @@ jobs:
         run: |
           export NODE_OPTIONS=--max_old_space_size=8192
           npm run build
-
-      - name: Build Deploy
-        continue-on-error: true
-        run: |
           npm run start-deploy
 
       - name: Build gh-pages
         run: |
           npm i
           npm run build
-
-      - name: Build Deploy gh-pages
-        run: |
           npm run deploy
 
       - name: Deploy

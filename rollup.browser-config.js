@@ -9,6 +9,7 @@ export default {
     file: "public/main.js",
     format: "esm",
   },
+  external: ["fs"],
   onwarn: function (error) {
     if (/Circular dependency/.test(error.message)) return;
     console.error(error.message);
