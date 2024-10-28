@@ -9,10 +9,10 @@
       </span>
   </p>
   <div>
-    <form if={Object.keys(state.codes).length > 0}  onsubmit={ chatNow }>
+    <form id="phoneForm" onsubmit={ chatNow } if={Object.keys(state.codes).length > 0} >
       <p>
         <select if={Object.keys(state.codes).length > 0} name="countryCode" value={state.activeCountry} onchange={countryChange}>
-          <option each={cc in Object.entries(state.codes)} value={cc[1]} {... state.activeCountry === cc[1] ? {selected: "selected"} : {}}
+          <option each={cc in Object.entries(state.codes).sort((a,b) => a[0] > b[0] ? 1 : -1)} value={cc[1]} {... state.activeCountry === cc[1] ? {selected: "selected"} : {}}
           >
             <span class="name">
               {cc[0]}
@@ -31,7 +31,7 @@
         </p>
       </p>
       <p class="button">
-        <button> Chat Now </button>
+        <button type="submit" > Chat Now </button>
       </p>
     </form>
   </div>
@@ -68,15 +68,23 @@
         const country = timezones[tz.timeZone]
         let activeCountry
 
+
         if(country){
           activeCountry = this.state.codes[this.state.countryCodes[country.country]]
         } else {
           activeCountry = Object.values(this.state.codes)[0]
         }
 
+        console.log({tz, country, activeCountry})
+
+        //console.log(.addEventListener('submit', this.chatNow))
+
+        this.$("#phoneForm").onsubmit =  this.chatNow;
+
         this.update({
           activeCountry
         });
+
       },
       numberOnly(e) {
         return new RegExp(/[0-9]/).test(e.key);

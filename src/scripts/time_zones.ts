@@ -1,11 +1,11 @@
-import * as fs from "https://deno.land/x/deno@v1.0.4/std/node/fs.ts";
+import { readFileSync } from "https://deno.land/x/deno@v1.0.4/std/node/fs.ts";
 
 const timezonePath = "src/data/time_zone.csv";
 let timezonedb: String;
 
 const timezones = async function () {
   if (!timezonedb) {
-    timezonedb = await fs.readFileSync(timezonePath, {
+    timezonedb = await readFileSync(timezonePath, {
       encoding: "utf8",
       flag: "r",
     }).toString();
