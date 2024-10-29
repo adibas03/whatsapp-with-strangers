@@ -19,7 +19,7 @@ app.use(async (ctx, next) => {
   const initialState = {
     initialRoute: ctx.request.url.pathname,
     base: ctx.request.url.origin,
-    routes,
+    routes
   };
 
   // generate the rendered html + css

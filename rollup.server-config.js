@@ -1,5 +1,6 @@
 import riot from "rollup-plugin-riot";
 import typescript from "@rollup/plugin-typescript";
+import pluginjson from "@rollup/plugin-json";
 
 export default {
   input: "src/app.riot",
@@ -10,6 +11,7 @@ export default {
   },
   plugins: [
     riot(),
+    pluginjson(),
     typescript({
       include: "./src/**",
     }),

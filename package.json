@@ -10,6 +10,7 @@
     "node": ">=10.0.0"
   },
   "scripts": {
+    "runscripts": "deno run --import-map=import_map.json --no-check=remote --allow-net --allow-read --allow-env --allow-write scripts/index.ts",
     "runnow": "deno run --import-map=import_map.json --no-check=remote --allow-net --allow-read --allow-env",
     "start": "npm run runnow -- --watch  index.ts",
     "start-deploy": "FOR_DEPLOY=true npm run runnow -- --allow-import index.ts",
@@ -17,7 +18,7 @@
     "clean": "rm -rf public/*",
     "build-browser": "rollup -c rollup.browser-config.js",
     "build-server": "rollup -c rollup.server-config.js",
-    "build": "npm run clean && npm run build-browser && npm run build-server",
+    "build": "npm run clean && npm run runscripts && npm run build-browser && npm run build-server",
     "build-and-start": "npm run build && npm run start",
     "watch": "rollup  -w -c",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -49,6 +50,7 @@
     "@riotjs/cli": "^9.0.5",
     "@riotjs/compiler": "^9.0.7",
     "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
     "rollup": "^4.9.5",
