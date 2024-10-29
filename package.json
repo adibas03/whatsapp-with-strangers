@@ -10,7 +10,7 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "runscripts": "deno run --import-map=import_map.json --no-check=remote --allow-net --allow-read --allow-env --allow-write scripts/index.ts",
+    "runscripts": "deno run --no-check=remote --allow-net --allow-read --allow-write scripts/index.ts",
     "runnow": "deno run --import-map=import_map.json --no-check=remote --allow-net --allow-read --allow-env",
     "start": "npm run runnow -- --watch  index.ts",
     "start-deploy": "FOR_DEPLOY=true npm run runnow -- --allow-import index.ts",

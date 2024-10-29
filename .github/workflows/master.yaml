@@ -36,7 +36,6 @@ jobs:
           CI: true
         run: |
           npm i
-          npm i
 
       - name: Build
         run: |

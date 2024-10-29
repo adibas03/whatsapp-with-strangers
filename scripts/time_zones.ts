@@ -1,8 +1,8 @@
 import { readFileSync } from "https://deno.land/x/deno@v1.0.4/std/node/fs.ts";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath } from "https://deno.land/x/deno@v1.0.4/std/node/url.ts";
 
 const timezonePath = "../src/dump/time_zone.csv";
-const timezoneJsonPath = "./src/data/timezones.json";
+const timezoneJsonPath = "../src/data/timezones.json";
 
 let timezonedb: String;
 
@@ -34,7 +34,7 @@ const loadTimezones = async function () {
   const encoder = new TextEncoder();
   const encodedData = encoder.encode(JSON.stringify(timezones, null, 2));
 
-  const file = await Deno.open(timezoneJsonPath, {
+  const file = await Deno.open(fileURLToPath(new URL(timezoneJsonPath, import.meta.url)), {
     create: true,
     write: true,
   });
