@@ -7,7 +7,7 @@
     </header>
     
     <nav>
-      <a each={page in getPages()} class={getLinkClass(page.path)} href=`{props.base}/{page.path}`>
+      <a each={page in getPages()} class={getLinkClass(page.path)} href=`{state.pathname}{page.path}`>
         {page.label}
       </a>
     </nav>
@@ -39,7 +39,8 @@
       },
       state: {
         currentPath: null,
-        showNotFound: false
+        showNotFound: false,
+        pathname: '/'
       },
       // the isServer property is automatically injected by @riotjs/ssr
       onBeforeMount({ initialRoute }) {
@@ -54,6 +55,8 @@
         this.anyRouteStream.on.value(this.onAnyRoute)
         // set the initial current path
         this.state.currentPath = initialRoute
+        // set site pathname
+        this.state.pathname = new URL(this.props.base).pathname
       },
       onRouterStarted() {
         // broadcast the router started event
