@@ -15,10 +15,10 @@
     "start": "npm run runnow -- --watch  index.ts",
     "start-deploy": "FOR_DEPLOY=true npm run runnow -- --allow-import index.ts",
     "deploy": "deno run --import-map=import_map.json --no-check=remote --allow-net --allow-read --allow-write --allow-import index.deploy.ts",
-    "clean": "rm -rf public/*",
+    "clean": "rm -rf node_modules dist public/*",
     "build-browser": "rollup -c rollup.browser-config.js",
     "build-server": "rollup -c rollup.server-config.js",
-    "build": "npm run clean && npm run runscripts && npm run build-browser && npm run build-server",
+    "build": "npm run clean && npm install && npm run runscripts && npm run build-browser && npm run build-server",
     "build-and-start": "npm run build && npm run start",
     "watch": "rollup  -w -c",
     "test": "echo \"Error: no test specified\" && exit 1"

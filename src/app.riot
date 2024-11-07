@@ -7,7 +7,7 @@
     </header>
     
     <nav>
-      <a each={page in getPages()} class={getLinkClass(page.path)} href={page.path}>
+      <a each={page in getPages()} class={getLinkClass(page.path)} href=`{props.base}/{page.path}`>
         {page.label}
       </a>
     </nav>
