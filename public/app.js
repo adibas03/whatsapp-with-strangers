@@ -2216,6 +2216,18 @@ var app = {
                           type: expressionTypes.ATTRIBUTE,
                           isBoolean: false,
                           name: 'href',
+
+                          evaluate: _scope => [
+                            '`',
+                            _scope.props.base
+                          ].join(
+                            ''
+                          )
+                        },
+                        {
+                          type: expressionTypes.ATTRIBUTE,
+                          isBoolean: false,
+                          name: 'page.path',
                           evaluate: _scope => _scope.page.path
                         }
                       ]
