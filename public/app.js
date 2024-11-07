@@ -2110,7 +2110,8 @@ var app = {
       },
       state: {
         currentPath: null,
-        showNotFound: false
+        showNotFound: false,
+        pathname: '/'
       },
       // the isServer property is automatically injected by @riotjs/ssr
       onBeforeMount({ initialRoute }) {
@@ -2125,6 +2126,8 @@ var app = {
         this.anyRouteStream.on.value(this.onAnyRoute);
         // set the initial current path
         this.state.currentPath = initialRoute;
+        // set site pathname
+        this.state.pathname = new URL(this.props.base).pathname;
       },
       onRouterStarted() {
         // broadcast the router started event
@@ -2219,16 +2222,12 @@ var app = {
 
                           evaluate: _scope => [
                             '`',
-                            _scope.props.base
+                            _scope.state.pathname,
+                            _scope.page.path,
+                            '`'
                           ].join(
                             ''
                           )
-                        },
-                        {
-                          type: expressionTypes.ATTRIBUTE,
-                          isBoolean: false,
-                          name: 'page.path',
-                          evaluate: _scope => _scope.page.path
                         }
                       ]
                     }
