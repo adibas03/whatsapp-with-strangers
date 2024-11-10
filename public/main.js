@@ -8724,6 +8724,41 @@ var storage = {
     storeHistory
 };
 
+const getUrlFromHistory = (history) => {
+    return history.apid || '';
+};
+const getHistoryIndexFromList = (key, historyList) => {
+    return historyList.findIndex((hist) => Object.keys(hist).includes(key));
+};
+const getHistoryFromList = (key, historyList) => {
+    const ind = getHistoryIndexFromList(key, historyList);
+    return ind > -1 ? historyList[ind] : undefined;
+};
+const historyExistsInList = (key, historyList) => {
+    const ind = getHistoryIndexFromList(key, historyList);
+    return ind > -1;
+};
+const addToHistoryList = (key, history, historyList) => {
+    let newList = historyList;
+    const ind = getHistoryIndexFromList(key, historyList);
+    const rec = {
+        [key]: history
+    };
+    if (ind > -1) {
+        newList.splice(ind, 1, rec);
+    }
+    else {
+        newList = newList.concat([rec]);
+    }
+    return newList;
+};
+var hService = {
+    getUrlFromHistory,
+    getHistoryFromList,
+    historyExistsInList,
+    addToHistoryList
+};
+
 var Home = {
   css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home form p:first-of-type,[is="home"] form p:first-of-type{ font-size: 0.8em; margin-bottom: 0; font-weight: bold; color: gray; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history h3 span,[is="home"] div.history h3 span{ font-size: 0.7em; } home div.history h3 span span,[is="home"] div.history h3 span span{ color: var(--primary-color); cursor: pointer; font-weight: 500; font-size: 0.9em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
 
@@ -8783,6 +8818,10 @@ var Home = {
       });
     },
 
+    extractHistoryUrl (history) {
+      return hService.getUrlFromHistory(history)
+    },
+
     updateHistory (history) {
       this.update({
         history
@@ -8802,32 +8841,8 @@ var Home = {
       const a = this.state.appPresent ? 0 : 1;
       const apid = api.replace("[n]", n).replace("[a]", a);
 
-      const newHistory = this.state.history.concat([
-        {
-          [n]: apid,
-        },
-      ]);
-
-      if (this.state.history.length > 0) {
-        const findIndex = this.state.history.findIndex((hist) =>
-          Object.keys(hist).includes(n)
-        );
-
-        if (findIndex > -1) {
-          if (Object.values(this.state.history[findIndex]).includes(apid)) ; else {
-            const history = this.state.history;
-            history.splice(findIndex, 1, {
-              [n]: apid,
-            });
-
-          this.updateHistory(history);
-          }
-        } else {
-          this.updateHistory(newHistory);
-        }
-      } else {
-        this.updateHistory(newHistory);
-      }
+      const newHistory = hService.addToHistoryList(n, {apid}, this.state.history);
+      this.updateHistory(newHistory);
 
       window.open(apid, "_blank");
     }
@@ -9069,7 +9084,10 @@ var Home = {
                   type: expressionTypes.ATTRIBUTE,
                   isBoolean: false,
                   name: 'href',
-                  evaluate: _scope => Object.values(_scope.h)[0]
+
+                  evaluate: _scope => _scope.extractHistoryUrl(
+                    Object.values(_scope.h)[0]
+                  )
                 },
                 {
                   type: expressionTypes.ATTRIBUTE,
