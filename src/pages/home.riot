@@ -39,7 +39,16 @@
     </form>
   </div>
   <div class="history">
-    <h3>Previous Chats ({state.history.length})</h3>
+    <h3>Previous Chats ({state.history.length})
+        <span if={state.history?.length > 0} >
+          <br/>
+          [
+            <span onclick={resetStorage}>
+              clear
+            </span>
+           ]
+        </span>
+    </h3>
     <p each={h in state.history}>
       <a href="{Object.values(h)[0]}" title="{Object.keys(h)[0]}" target="_blank">
         {Object.keys(h)[0]}
@@ -65,6 +74,10 @@
         activeNumber: "",
         appPresent: false,
         history: storage.getStoredHistory() || [],
+      },
+      resetStorage(){
+        storage.clearStoredHistory()
+        this.updateHistory([])
       },
       onMounted() {
 
@@ -102,6 +115,12 @@
           appPresent: !this.state.appPresent,
         });
       },
+      updateHistory (history) {
+        this.update({
+          history
+        });
+        storage.storeHistory(history)
+      },
       chatNow(e) {
         e.preventDefault();
 
@@ -113,13 +132,6 @@
         )}`;
         const a = this.state.appPresent ? 0 : 1;
         const apid = api.replace("[n]", n).replace("[a]", a);
-
-        const updateHistory = (history) => {
-          this.update({
-            history
-          });
-          storage.storeHistory(history)
-        }
 
         const newHistory = this.state.history.concat([
           {
@@ -141,13 +153,13 @@
                 [n]: apid,
               });
 
-            updateHistory(history);
+            this.updateHistory(history);
             }
           } else {
-            updateHistory(newHistory);
+            this.updateHistory(newHistory);
           }
         } else {
-          updateHistory(newHistory);
+          this.updateHistory(newHistory);
         }
 
         window.open(apid, "_blank");
@@ -215,6 +227,17 @@
 
     div.history h3 {
       margin-bottom: 1.2em;
+    }
+
+    div.history h3 span{
+      font-size: 0.7em;
+    }
+
+    div.history h3 span span{
+      color: var(--primary-color);
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9em;
     }
 
     div.history p {
