@@ -8706,7 +8706,7 @@ var timezones = {
 };
 
 var Home = {
-  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
+  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home form p:first-of-type,[is="home"] form p:first-of-type{ font-size: 0.8em; margin-bottom: 0; font-weight: bold; color: gray; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
 
   exports: {
     state: {
@@ -8823,7 +8823,7 @@ var Home = {
         selector: '[expr5]',
 
         template: template(
-          '<p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" type="tel" pattern="[0-9]+" minlength="10" maxlength="11" placeholder="xxxxxxxxxx" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
+          '<p>\n        Enter stranger\'s number\n      </p><p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" type="tel" pattern="[0-9]+" minlength="10" maxlength="11" placeholder="xxxxxxxxxx" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
           [
             {
               expressions: [
@@ -10468,6 +10468,9 @@ var App = {
         // set site pathname
         this.state.pathname = new URL(this.props.base).pathname;
       },
+      calcRoute(path) {
+        return `${this.state.pathname}${path}`.replace(new RegExp(/\/\//, 'gi'), '/');
+      },
       onRouterStarted() {
         // broadcast the router started event
         this.routerStateStream.push('started');
@@ -10496,7 +10499,6 @@ var App = {
         });
       },
       getLinkClass(path) {
-
         return this.state?.currentPath === path ? 'active' : null
       },
       onBeforeUnmount() {
@@ -10559,13 +10561,8 @@ var App = {
                           isBoolean: false,
                           name: 'href',
 
-                          evaluate: _scope => [
-                            '`',
-                            _scope.state.pathname,
-                            _scope.page.path,
-                            '`'
-                          ].join(
-                            ''
+                          evaluate: _scope => _scope.calcRoute(
+                            _scope.page.path
                           )
                         }
                       ]
