@@ -8705,8 +8705,27 @@ var timezones = {
 }
 };
 
+const HISTORY_REF = "wwsc_storage";
+const prepForStorage = (values) => {
+    return values.in ? JSON.stringify(values.in) : values.out ? JSON.parse(values.out) : null;
+};
+const getStoredHistory = () => {
+    return prepForStorage({ out: localStorage.getItem(HISTORY_REF) || '[]' });
+};
+const clearStoredHistory = () => {
+    localStorage.removeItem(HISTORY_REF);
+};
+const storeHistory = (value) => {
+    localStorage.setItem(HISTORY_REF, prepForStorage({ in: value }));
+};
+var storage = {
+    getStoredHistory,
+    clearStoredHistory,
+    storeHistory
+};
+
 var Home = {
-  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home form p:first-of-type,[is="home"] form p:first-of-type{ font-size: 0.8em; margin-bottom: 0; font-weight: bold; color: gray; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
+  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home form p:first-of-type,[is="home"] form p:first-of-type{ font-size: 0.8em; margin-bottom: 0; font-weight: bold; color: gray; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history h3 span,[is="home"] div.history h3 span{ font-size: 0.7em; } home div.history h3 span span,[is="home"] div.history h3 span span{ color: var(--primary-color); cursor: pointer; font-weight: 500; font-size: 0.9em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
 
   exports: {
     state: {
@@ -8715,7 +8734,12 @@ var Home = {
       activeCountry: "",
       activeNumber: "",
       appPresent: false,
-      history: [],
+      history: storage.getStoredHistory() || [],
+    },
+
+    resetStorage(){
+      storage.clearStoredHistory();
+      this.updateHistory([]);
     },
 
     onMounted() {
@@ -8759,6 +8783,13 @@ var Home = {
       });
     },
 
+    updateHistory (history) {
+      this.update({
+        history
+      });
+      storage.storeHistory(history);
+    },
+
     chatNow(e) {
       e.preventDefault();
 
@@ -8771,15 +8802,11 @@ var Home = {
       const a = this.state.appPresent ? 0 : 1;
       const apid = api.replace("[n]", n).replace("[a]", a);
 
-      const updateHistory = () => {
-        this.update({
-          history: this.state.history.concat([
-            {
-              [n]: apid,
-            },
-          ]),
-        });
-      };
+      const newHistory = this.state.history.concat([
+        {
+          [n]: apid,
+        },
+      ]);
 
       if (this.state.history.length > 0) {
         const findIndex = this.state.history.findIndex((hist) =>
@@ -8793,15 +8820,13 @@ var Home = {
               [n]: apid,
             });
 
-            this.update({
-              history,
-            });
+          this.updateHistory(history);
           }
         } else {
-          updateHistory();
+          this.updateHistory(newHistory);
         }
       } else {
-        updateHistory();
+        this.updateHistory(newHistory);
       }
 
       window.open(apid, "_blank");
@@ -8814,7 +8839,7 @@ var Home = {
     bindingTypes,
     getComponent
   ) => template(
-    '<h2>Hello <b>Stranger,</b></h2><p>\n    Chat with anyone on Whatsapp without saving the number to your contacts! <br/><span>\n      Ever had to chat with a number on whatsapp just once; perhaps to send some \n      information across or to complete some process? <br/>\n      Now you can, without saving the number as a contact.\n      </span></p><div><form expr5="expr5"></form></div><div class="history"><h3 expr12="expr12"> </h3><p expr13="expr13"></p><p expr15="expr15"></p></div>',
+    '<h2>Hello <b>Stranger,</b></h2><p>\n    Chat with anyone on Whatsapp without saving the number to your contacts! <br/><span>\n      Ever had to chat with a number on whatsapp just once; perhaps to send some \n      information across or to complete some process? <br/>\n      Now you can, without saving the number as a contact.\n      </span></p><div><form expr5="expr5"></form></div><div class="history"><h3 expr12="expr12"> <span expr13="expr13"></span></h3><p expr15="expr15"></p><p expr17="expr17"></p></div>',
     [
       {
         type: bindingTypes.IF,
@@ -8823,7 +8848,7 @@ var Home = {
         selector: '[expr5]',
 
         template: template(
-          '<p>\n        Enter stranger\'s number\n      </p><p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" type="tel" pattern="[0-9]+" minlength="10" maxlength="11" placeholder="xxxxxxxxxx" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
+          '<p>\n        Enter unsaved number\n      </p><p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" type="tel" pattern="[0-9]+" minlength="10" maxlength="11" placeholder="xxxxxxxxxx" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
           [
             {
               expressions: [
@@ -8994,16 +9019,40 @@ var Home = {
         ]
       },
       {
+        type: bindingTypes.IF,
+        evaluate: _scope => _scope.state.history?.length > 0,
+        redundantAttribute: 'expr13',
+        selector: '[expr13]',
+
+        template: template(
+          '<br/>\n          [\n            <span expr14="expr14">\n              clear\n            </span>\n           ]\n        ',
+          [
+            {
+              redundantAttribute: 'expr14',
+              selector: '[expr14]',
+
+              expressions: [
+                {
+                  type: expressionTypes.EVENT,
+                  name: 'onclick',
+                  evaluate: _scope => _scope.resetStorage
+                }
+              ]
+            }
+          ]
+        )
+      },
+      {
         type: bindingTypes.EACH,
         getKey: null,
         condition: null,
 
         template: template(
-          '<a expr14="expr14" target="_blank"> </a>',
+          '<a expr16="expr16" target="_blank"> </a>',
           [
             {
-              redundantAttribute: 'expr14',
-              selector: '[expr14]',
+              redundantAttribute: 'expr16',
+              selector: '[expr16]',
 
               expressions: [
                 {
@@ -9033,8 +9082,8 @@ var Home = {
           ]
         ),
 
-        redundantAttribute: 'expr13',
-        selector: '[expr13]',
+        redundantAttribute: 'expr15',
+        selector: '[expr15]',
         itemName: 'h',
         indexName: null,
         evaluate: _scope => _scope.state.history
@@ -9042,8 +9091,8 @@ var Home = {
       {
         type: bindingTypes.IF,
         evaluate: _scope => _scope.state.history.length === 0,
-        redundantAttribute: 'expr15',
-        selector: '[expr15]',
+        redundantAttribute: 'expr17',
+        selector: '[expr17]',
 
         template: template(
           '\n      No history yet.\n    ',
@@ -9084,11 +9133,11 @@ var NotFound = {
     bindingTypes,
     getComponent
   ) => template(
-    '<h1>Page not found</h1><p>Opsi, wrong page. Go back to <a expr16="expr16"> </a> :(</p>',
+    '<h1>Page not found</h1><p>Opsi, wrong page. Go back to <a expr18="expr18"> </a> :(</p>',
     [
       {
-        redundantAttribute: 'expr16',
-        selector: '[expr16]',
+        redundantAttribute: 'expr18',
+        selector: '[expr18]',
 
         expressions: [
           {
