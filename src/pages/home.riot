@@ -11,7 +11,7 @@
   <div>
     <form onsubmit={ chatNow } if={Object.keys(state.codes).length > 0} >
       <p>
-        Enter stranger's number
+        Enter unsaved number
       </p>
       <p>
         <select if={Object.keys(state.codes).length > 0} name="countryCode" value={state.activeCountry} onchange={countryChange}>
@@ -55,6 +55,7 @@
   <script>
     import countryCodes from "country-codes-list";
     import timezones from "../data/timezones.json" with { type: "json" };
+    import storage from "../service/storage";
 
     export default {
       state: {
@@ -63,7 +64,7 @@
         activeCountry: "",
         activeNumber: "",
         appPresent: false,
-        history: [],
+        history: storage.getStoredHistory() || [],
       },
       onMounted() {
 
@@ -113,15 +114,18 @@
         const a = this.state.appPresent ? 0 : 1;
         const apid = api.replace("[n]", n).replace("[a]", a);
 
-        const updateHistory = () => {
+        const updateHistory = (history) => {
           this.update({
-            history: this.state.history.concat([
-              {
-                [n]: apid,
-              },
-            ]),
+            history
           });
+          storage.storeHistory(history)
         }
+
+        const newHistory = this.state.history.concat([
+          {
+            [n]: apid,
+          },
+        ])
 
         if (this.state.history.length > 0) {
           const findIndex = this.state.history.findIndex((hist) =>
@@ -137,15 +141,13 @@
                 [n]: apid,
               });
 
-              this.update({
-                history,
-              });
+            updateHistory(history);
             }
           } else {
-            updateHistory();
+            updateHistory(newHistory);
           }
         } else {
-          updateHistory();
+          updateHistory(newHistory);
         }
 
         window.open(apid, "_blank");
