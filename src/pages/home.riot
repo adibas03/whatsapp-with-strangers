@@ -11,6 +11,9 @@
   <div>
     <form onsubmit={ chatNow } if={Object.keys(state.codes).length > 0} >
       <p>
+        Enter stranger's number
+      </p>
+      <p>
         <select if={Object.keys(state.codes).length > 0} name="countryCode" value={state.activeCountry} onchange={countryChange}>
           <option each={cc in Object.entries(state.codes).sort((a,b) => a[0] > b[0] ? 1 : -1)} value={cc[1]} {... state.activeCountry === cc[1] ? {selected: "selected"} : {}}
           >
@@ -164,6 +167,13 @@
 
     div.history {
       margin-top: 2em;
+    }
+
+    form p:first-of-type {
+      font-size: 0.8em;
+      margin-bottom: 0;
+      font-weight: bold;
+      color: gray;
     }
 
     select {

@@ -7,7 +7,7 @@
     </header>
     
     <nav>
-      <a each={page in getPages()} class={getLinkClass(page.path)} href=`{state.pathname}{page.path}`>
+      <a each={page in getPages()} class={getLinkClass(page.path)} href={calcRoute(page.path)}>
         {page.label}
       </a>
     </nav>
@@ -58,6 +58,9 @@
         // set site pathname
         this.state.pathname = new URL(this.props.base).pathname
       },
+      calcRoute(path) {
+        return `${this.state.pathname}${path}`.replace(new RegExp(/\/\//, 'gi'), '/')
+      },
       onRouterStarted() {
         // broadcast the router started event
         this.routerStateStream.push('started')
@@ -86,7 +89,6 @@
         })
       },
       getLinkClass(path) {
-
         return this.state?.currentPath === path ? 'active' : null
       },
       onBeforeUnmount() {
