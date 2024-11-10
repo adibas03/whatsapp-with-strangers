@@ -50,7 +50,7 @@
         </span>
     </h3>
     <p each={h in state.history}>
-      <a href="{Object.values(h)[0]}" title="{Object.keys(h)[0]}" target="_blank">
+      <a href="{extractHistoryUrl(Object.values(h)[0])}" title="{Object.keys(h)[0]}" target="_blank">
         {Object.keys(h)[0]}
       </a>
     </p>
@@ -58,13 +58,13 @@
     <p if={state.history.length === 0}>
       No history yet.
     </p>
-
   </div>
 
   <script>
     import countryCodes from "country-codes-list";
     import timezones from "../data/timezones.json" with { type: "json" };
     import storage from "../service/storage";
+    import hService from "../service/history";
 
     export default {
       state: {
@@ -115,6 +115,9 @@
           appPresent: !this.state.appPresent,
         });
       },
+      extractHistoryUrl (history) {
+        return hService.getUrlFromHistory(history)
+      },
       updateHistory (history) {
         this.update({
           history
@@ -133,34 +136,8 @@
         const a = this.state.appPresent ? 0 : 1;
         const apid = api.replace("[n]", n).replace("[a]", a);
 
-        const newHistory = this.state.history.concat([
-          {
-            [n]: apid,
-          },
-        ])
-
-        if (this.state.history.length > 0) {
-          const findIndex = this.state.history.findIndex((hist) =>
-            Object.keys(hist).includes(n)
-          );
-
-          if (findIndex > -1) {
-            if (Object.values(this.state.history[findIndex]).includes(apid)) {
-              // skip
-            } else {
-              const history = this.state.history;
-              history.splice(findIndex, 1, {
-                [n]: apid,
-              });
-
-            this.updateHistory(history);
-            }
-          } else {
-            this.updateHistory(newHistory);
-          }
-        } else {
-          this.updateHistory(newHistory);
-        }
+        const newHistory = hService.addToHistoryList(n, {apid}, this.state.history)
+        this.updateHistory(newHistory);
 
         window.open(apid, "_blank");
       },
