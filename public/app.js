@@ -1769,10 +1769,39 @@ var Home = {
       return new RegExp(/[0-9]/).test(e.key);
     },
 
-    phoneNumbeChange(p) {
+    cleanNumber(e) {
+      return e.replace(new RegExp(/[^0-9]+/, 'gmi'), '');
+    },
+
+    phoneNumberChange(p) {
+      const activeNumber = this.cleanNumber(p.target.value);       
+
       this.update({
-        activeNumber: p.target.value,
+        activeNumber
       });
+
+      this.phoneNumberValid(true);
+    },
+
+    phoneNumberValid(reset) {
+      const field = document.getElementById("phoneNumber");
+
+      if(reset){
+        field.setCustomValidity("");
+        field.reportValidity();
+        return true
+      }
+
+      const activeNumber = this.state.activeNumber;
+      const isValid = new RegExp(/^[0-9]{10,11}$/).test(activeNumber);
+
+      if(!isValid){
+        field.setCustomValidity("Please match the format requested: 123 456 7890");
+        field.reportValidity();
+        return false        
+      }
+
+      return true
     },
 
     countryChange(e) {
@@ -1801,10 +1830,15 @@ var Home = {
     chatNow(e) {
       e.preventDefault();
 
+      if(!this.phoneNumberValid()){
+        return false
+      }
+
+      const activeNumber = this.state.activeNumber;
       const api =
         "https://api.whatsapp.com/send/?phone=[n]&text&type=phone_number&app_absent=[a]";
-      const n = `${this.state.activeCountry}${this.state.activeNumber.replace(
-        this.state.activeNumber.length > 10 ? new RegExp(/^0/) : "",
+      const n = `${this.state.activeCountry}${activeNumber.replace(
+        activeNumber.length > 10 ? new RegExp(/^0/) : "",
         ""
       )}`;
       const a = this.state.appPresent ? 0 : 1;
@@ -1832,7 +1866,7 @@ var Home = {
         selector: '[expr5]',
 
         template: template(
-          '<p>\n        Enter unsaved number\n      </p><p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" type="tel" pattern="[0-9]+" minlength="10" maxlength="11" placeholder="xxxxxxxxxx" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
+          '<p>\n        Enter unsaved number\n      </p><p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" id="phoneNumber" type="tel" pattern="[0-9]+" minlength="10" placeholder="123 456 7890" title="123 456 7890" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
           [
             {
               expressions: [
@@ -1959,8 +1993,18 @@ var Home = {
                 },
                 {
                   type: expressionTypes.EVENT,
+                  name: 'onkeyup',
+                  evaluate: _scope => _scope.phoneNumberChange
+                },
+                {
+                  type: expressionTypes.EVENT,
                   name: 'onchange',
-                  evaluate: _scope => _scope.phoneNumbeChange
+                  evaluate: _scope => _scope.phoneNumberChange
+                },
+                {
+                  type: expressionTypes.EVENT,
+                  name: 'onpaste',
+                  evaluate: _scope => _scope.phoneNumberChange
                 }
               ]
             },
