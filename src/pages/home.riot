@@ -25,7 +25,7 @@
             </span>
           </option>
         </select>
-        <input id="phoneNumber" value={state.activeNumber} onkeypress={numberOnly} onkeyup={phoneNumberChange} onchange={phoneNumberChange} onpaste={phoneNumberChange} type="tel" pattern="[0-9]+" minlength="10" placeholder="123 456 7890" title="123 456 7890" required/>
+        <input id="phoneNumber" value={state.activeNumber} onkeypress={numberOnly} onkeyup={phoneNumberChange} onchange={phoneNumberChange} onpaste={phoneNumberChange} type="tel" pattern="[0-9]\{10,11}" minlength="10" placeholder="123 456 7890" title="123 456 7890" required/>
         <p class="app">
           <input id="appPresent" value={state.appPresent} onchange={appPresentChange} type="checkbox" />
           <label for="appPresent"> 
@@ -117,12 +117,13 @@
 
         if(reset){
           field.setCustomValidity("")
-          field.reportValidity()
           return true
         }
 
         const activeNumber = this.state.activeNumber
-        const isValid = new RegExp(/^[0-9]{10,11}$/).test(activeNumber)
+        const isValid = new RegExp(/^[0-9]{10,11}$/).test(activeNumber) && (
+          activeNumber.length === 10 || (activeNumber.length === 11 && new RegExp(/^0[0-9]{10}$/).test(activeNumber))
+        ) 
 
         if(!isValid){
           field.setCustomValidity("Please match the format requested: 123 456 7890")
