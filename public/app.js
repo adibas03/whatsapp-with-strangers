@@ -1788,12 +1788,13 @@ var Home = {
 
       if(reset){
         field.setCustomValidity("");
-        field.reportValidity();
         return true
       }
 
       const activeNumber = this.state.activeNumber;
-      const isValid = new RegExp(/^[0-9]{10,11}$/).test(activeNumber);
+      const isValid = new RegExp(/^[0-9]{10,11}$/).test(activeNumber) && (
+        activeNumber.length === 10 || (activeNumber.length === 11 && new RegExp(/^0[0-9]{10}$/).test(activeNumber))
+      ); 
 
       if(!isValid){
         field.setCustomValidity("Please match the format requested: 123 456 7890");
@@ -1866,7 +1867,7 @@ var Home = {
         selector: '[expr5]',
 
         template: template(
-          '<p>\n        Enter unsaved number\n      </p><p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" id="phoneNumber" type="tel" pattern="[0-9]+" minlength="10" placeholder="123 456 7890" title="123 456 7890" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
+          '<p>\n        Enter unsaved number\n      </p><p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" id="phoneNumber" type="tel" pattern="[0-9]{10,11}" minlength="10" placeholder="123 456 7890" title="123 456 7890" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
           [
             {
               expressions: [
