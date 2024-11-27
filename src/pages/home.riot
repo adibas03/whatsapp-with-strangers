@@ -50,9 +50,12 @@
         </span>
     </h3>
     <p each={h in state.history}>
-      <a href="{extractHistoryUrl(Object.values(h)[0])}" title="{Object.keys(h)[0]}" target="_blank">
-        {Object.keys(h)[0]}
+      <a href="{extractHistoryUrl(Object.values(h)[0])}" title="{extractHistoryKey(h)}" target="_blank">
+        {extractHistoryKey(h)}
       </a>
+      <span>
+        <span onclick={() => removeHistory(extractHistoryKey(h))}> x </span>
+      </span>
     </p>
 
     <p if={state.history.length === 0}>
@@ -74,10 +77,6 @@
         activeNumber: "",
         appPresent: false,
         history: storage.getStoredHistory() || [],
-      },
-      resetStorage(){
-        storage.clearStoredHistory()
-        this.updateHistory([])
       },
       onMounted() {
 
@@ -146,6 +145,17 @@
       extractHistoryUrl (history) {
         return hService.getUrlFromHistory(history)
       },
+      extractHistoryKey (history) {
+        return hService.getKeyFromHistoryRef(history)
+      },
+      removeHistory (key) {
+        const newHistory = hService.removeFromHistoryList(key ,this.state.history)
+        this.updateHistory(newHistory);
+      },
+      resetStorage(){
+        storage.clearStoredHistory()
+        this.updateHistory([])
+      },
       updateHistory (history) {
         this.update({
           history
@@ -168,8 +178,9 @@
         )}`;
         const a = this.state.appPresent ? 0 : 1;
         const apid = api.replace("[n]", n).replace("[a]", a);
+        const timestamp = new Date().getTime()
 
-        const newHistory = hService.addToHistoryList(n, {apid}, this.state.history)
+        const newHistory = hService.addToHistoryList(n, {apid, timestamp}, this.state.history)
         this.updateHistory(newHistory);
 
         window.open(apid, "_blank");
@@ -252,6 +263,20 @@
 
     div.history p {
       font-size: 0.8em;
+    }
+
+    div.history p span {
+      vertical-align: top;
+      display: inline;
+      font-size: 1em;
+    }
+
+    div.history p span span {
+      font-weight: 600;
+      color: firebrick;
+      margin-left: 4px;
+      font-size: 0.8em;
+      cursor: pointer;
     }
 
   </style>

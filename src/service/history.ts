@@ -1,5 +1,6 @@
 interface History {
     apid: string
+    timestamp?: number
 }
 interface HistoryRef {
     [index: string]: History;
@@ -8,6 +9,10 @@ type HistoryList = HistoryRef[]
 
 const getUrlFromHistory = (history: History) => {
     return history.apid || ''
+}
+
+const getKeyFromHistoryRef = (history: HistoryRef) => {
+    return Object.keys(history)[0]
 }
 
 const getHistoryIndexFromList = (key: string, historyList: HistoryList) => {
@@ -43,10 +48,24 @@ const addToHistoryList = (key: string, history: History, historyList: HistoryLis
     return newList;
 }
 
+const removeFromHistoryList = (key: string, historyList: HistoryList) => {
+
+    let newList = historyList
+    const ind = getHistoryIndexFromList(key, historyList)
+
+    if (ind > -1) {
+        newList.splice(ind, 1)
+    }
+
+    return newList;
+}
+
 
 export default {
     getUrlFromHistory,
+    getKeyFromHistoryRef,
     getHistoryFromList,
     historyExistsInList,
-    addToHistoryList
+    addToHistoryList,
+    removeFromHistoryList
 }
