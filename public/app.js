@@ -1696,6 +1696,9 @@ var storage = {
 const getUrlFromHistory = (history) => {
     return history.apid || '';
 };
+const getKeyFromHistoryRef = (history) => {
+    return Object.keys(history)[0];
+};
 const getHistoryIndexFromList = (key, historyList) => {
     return historyList.findIndex((hist) => Object.keys(hist).includes(key));
 };
@@ -1721,15 +1724,25 @@ const addToHistoryList = (key, history, historyList) => {
     }
     return newList;
 };
+const removeFromHistoryList = (key, historyList) => {
+    let newList = historyList;
+    const ind = getHistoryIndexFromList(key, historyList);
+    if (ind > -1) {
+        newList.splice(ind, 1);
+    }
+    return newList;
+};
 var hService = {
     getUrlFromHistory,
+    getKeyFromHistoryRef,
     getHistoryFromList,
     historyExistsInList,
-    addToHistoryList
+    addToHistoryList,
+    removeFromHistoryList
 };
 
 var Home = {
-  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home form p:first-of-type,[is="home"] form p:first-of-type{ font-size: 0.8em; margin-bottom: 0; font-weight: bold; color: gray; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history h3 span,[is="home"] div.history h3 span{ font-size: 0.7em; } home div.history h3 span span,[is="home"] div.history h3 span span{ color: var(--primary-color); cursor: pointer; font-weight: 500; font-size: 0.9em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; }`,
+  css: `home p span,[is="home"] p span{ font-size: 0.6em; max-width: 75%; margin: 0.6em auto 2em; display: block; } home div p.app,[is="home"] div p.app{ font-size: 0.8em; } home div.history,[is="home"] div.history{ margin-top: 2em; } home form p:first-of-type,[is="home"] form p:first-of-type{ font-size: 0.8em; margin-bottom: 0; font-weight: bold; color: gray; } home select,[is="home"] select{ display: inline; width: 8.8em; margin-right: 0.5em; padding: 0.14em 0.1em; font-size: 0.7em; } home select option,[is="home"] select option{ } home select option span.name,[is="home"] select option span.name{ text-overflow: ellipsis; } home input,[is="home"] input{ margin-top: 0.5em; line-height: 1.17em; width: 10em; font-size: 0.8em; } home div p.app input,[is="home"] div p.app input{ margin: 0.1em 0.2em 0; width: auto; } home p.button,[is="home"] p.button{ margin-top: 1em; } home button,[is="home"] button{ font-size: 0.7em; } home div.history h3,[is="home"] div.history h3{ margin-bottom: 1.2em; } home div.history h3 span,[is="home"] div.history h3 span{ font-size: 0.7em; } home div.history h3 span span,[is="home"] div.history h3 span span{ color: var(--primary-color); cursor: pointer; font-weight: 500; font-size: 0.9em; } home div.history p,[is="home"] div.history p{ font-size: 0.8em; } home div.history p span,[is="home"] div.history p span{ vertical-align: top; display: inline; font-size: 1em; } home div.history p span span,[is="home"] div.history p span span{ font-weight: 600; color: firebrick; margin-left: 4px; font-size: 0.8em; cursor: pointer; }`,
 
   exports: {
     state: {
@@ -1739,11 +1752,6 @@ var Home = {
       activeNumber: "",
       appPresent: false,
       history: storage.getStoredHistory() || [],
-    },
-
-    resetStorage(){
-      storage.clearStoredHistory();
-      this.updateHistory([]);
     },
 
     onMounted() {
@@ -1821,6 +1829,20 @@ var Home = {
       return hService.getUrlFromHistory(history)
     },
 
+    extractHistoryKey (history) {
+      return hService.getKeyFromHistoryRef(history)
+    },
+
+    removeHistory (key) {
+      const newHistory = hService.removeFromHistoryList(key ,this.state.history);
+      this.updateHistory(newHistory);
+    },
+
+    resetStorage(){
+      storage.clearStoredHistory();
+      this.updateHistory([]);
+    },
+
     updateHistory (history) {
       this.update({
         history
@@ -1844,8 +1866,9 @@ var Home = {
       )}`;
       const a = this.state.appPresent ? 0 : 1;
       const apid = api.replace("[n]", n).replace("[a]", a);
+      const timestamp = new Date().getTime();
 
-      const newHistory = hService.addToHistoryList(n, {apid}, this.state.history);
+      const newHistory = hService.addToHistoryList(n, {apid, timestamp}, this.state.history);
       this.updateHistory(newHistory);
 
       window.open(apid, "_blank");
@@ -1858,7 +1881,7 @@ var Home = {
     bindingTypes,
     getComponent
   ) => template(
-    '<h2>Hello <b>Stranger,</b></h2><p>\n    Chat with anyone on Whatsapp without saving the number to your contacts! <br/><span>\n      Ever had to chat with a number on whatsapp just once; perhaps to send some \n      information across or to complete some process? <br/>\n      Now you can, without saving the number as a contact.\n      </span></p><div><form expr5="expr5"></form></div><div class="history"><h3 expr12="expr12"> <span expr13="expr13"></span></h3><p expr15="expr15"></p><p expr17="expr17"></p></div>',
+    '<h2>Hello <b>Stranger,</b></h2><p>\n    Chat with anyone on Whatsapp without saving the number to your contacts! <br/><span>\n      Ever had to chat with a number on whatsapp just once; perhaps to send some \n      information across or to complete some process? <br/>\n      Now you can, without saving the number as a contact.\n      </span></p><div><form expr5="expr5"></form></div><div class="history"><h3 expr12="expr12"> <span expr13="expr13"></span></h3><p expr15="expr15"></p><p expr18="expr18"></p></div>',
     [
       {
         type: bindingTypes.IF,
@@ -2077,7 +2100,7 @@ var Home = {
         condition: null,
 
         template: template(
-          '<a expr16="expr16" target="_blank"> </a>',
+          '<a expr16="expr16" target="_blank"> </a><span><span expr17="expr17"> x </span></span>',
           [
             {
               redundantAttribute: 'expr16',
@@ -2089,7 +2112,9 @@ var Home = {
                   childNodeIndex: 0,
 
                   evaluate: _scope => [
-                    Object.keys(_scope.h)[0]
+                    _scope.extractHistoryKey(
+                      _scope.h
+                    )
                   ].join(
                     ''
                   )
@@ -2107,7 +2132,22 @@ var Home = {
                   type: expressionTypes.ATTRIBUTE,
                   isBoolean: false,
                   name: 'title',
-                  evaluate: _scope => Object.keys(_scope.h)[0]
+
+                  evaluate: _scope => _scope.extractHistoryKey(
+                    _scope.h
+                  )
+                }
+              ]
+            },
+            {
+              redundantAttribute: 'expr17',
+              selector: '[expr17]',
+
+              expressions: [
+                {
+                  type: expressionTypes.EVENT,
+                  name: 'onclick',
+                  evaluate: _scope => () => _scope.removeHistory(_scope.extractHistoryKey(_scope.h))
                 }
               ]
             }
@@ -2123,8 +2163,8 @@ var Home = {
       {
         type: bindingTypes.IF,
         evaluate: _scope => _scope.state.history.length === 0,
-        redundantAttribute: 'expr17',
-        selector: '[expr17]',
+        redundantAttribute: 'expr18',
+        selector: '[expr18]',
 
         template: template(
           '\n      No history yet.\n    ',
@@ -2165,11 +2205,11 @@ var NotFound = {
     bindingTypes,
     getComponent
   ) => template(
-    '<h1>Page not found</h1><p>Opsi, wrong page. Go back to <a expr18="expr18"> </a> :(</p>',
+    '<h1>Page not found</h1><p>Opsi, wrong page. Go back to <a expr19="expr19"> </a> :(</p>',
     [
       {
-        redundantAttribute: 'expr18',
-        selector: '[expr18]',
+        redundantAttribute: 'expr19',
+        selector: '[expr19]',
 
         expressions: [
           {
