@@ -2337,7 +2337,7 @@ var app = {
         slots: [
           {
             id: 'default',
-            html: '<header><img width="60" height="60" src="./src/images/phone.png" alt="Phone Logo"/>\n      +\n      <img width="75" height="76" src="./src/images/whatsapp.png" alt="Whatsapp Logo"/></header><nav><a expr1="expr1"></a></nav><not-found expr2="expr2"></not-found><main><route expr3="expr3"></route></main>',
+            html: '<header><img height="76" src="./src/images/p+w_.png" alt="Whatsapp Logo"/></header><nav><a expr1="expr1"></a></nav><not-found expr2="expr2"></not-found><main><route expr3="expr3"></route></main>',
 
             bindings: [
               {

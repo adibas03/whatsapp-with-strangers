@@ -8912,16 +8912,16 @@ var Home = {
     bindingTypes,
     getComponent
   ) => template(
-    '<h2>Hello <b>Stranger,</b></h2><p>\n    Chat with anyone on Whatsapp without saving the number to your contacts! <br/><span>\n      Ever had to chat with a number on whatsapp just once; perhaps to send some \n      information across or to complete some process? <br/>\n      Now you can, without saving the number as a contact.\n      </span></p><div><form expr6="expr6"></form></div><div class="history"><h3 expr13="expr13"> <span expr14="expr14"></span></h3><p expr16="expr16"></p><p expr19="expr19"></p></div>',
+    '<h2>Hello <b>Stranger,</b></h2><p>\n    Chat with anyone on Whatsapp without saving the number to your contacts! <br/><span>\n      Ever had to chat with a number on whatsapp just once; perhaps to send some \n      information across or to complete some process? <br/>\n      Now you can, without saving the number as a contact.\n      </span></p><div><form expr5="expr5"></form></div><div class="history"><h3 expr12="expr12"> <span expr13="expr13"></span></h3><p expr15="expr15"></p><p expr18="expr18"></p></div>',
     [
       {
         type: bindingTypes.IF,
         evaluate: _scope => Object.keys(_scope.state.codes).length > 0,
-        redundantAttribute: 'expr6',
-        selector: '[expr6]',
+        redundantAttribute: 'expr5',
+        selector: '[expr5]',
 
         template: template(
-          '<p>\n        Enter unsaved number\n      </p><p><select expr7="expr7" name="countryCode"></select><input expr11="expr11" id="phoneNumber" type="tel" pattern="[0-9]{10,11}" minlength="10" placeholder="123 456 7890" title="123 456 7890" required/><p class="app"><input expr12="expr12" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
+          '<p>\n        Enter unsaved number\n      </p><p><select expr6="expr6" name="countryCode"></select><input expr10="expr10" id="phoneNumber" type="tel" pattern="[0-9]{10,11}" minlength="10" placeholder="123 456 7890" title="123 456 7890" required/><p class="app"><input expr11="expr11" id="appPresent" type="checkbox"/><label for="appPresent"> \n            Do you have Whatsapp installed?\n          </label></p></p><p class="button"><button type="submit"> Chat Now </button></p>',
           [
             {
               expressions: [
@@ -8935,11 +8935,11 @@ var Home = {
             {
               type: bindingTypes.IF,
               evaluate: _scope => Object.keys(_scope.state.codes).length > 0,
-              redundantAttribute: 'expr7',
-              selector: '[expr7]',
+              redundantAttribute: 'expr6',
+              selector: '[expr6]',
 
               template: template(
-                '<option expr8="expr8"></option>',
+                '<option expr7="expr7"></option>',
                 [
                   {
                     expressions: [
@@ -8962,7 +8962,7 @@ var Home = {
                     condition: null,
 
                     template: template(
-                      '<span expr9="expr9" class="name"> </span><span expr10="expr10"> </span>',
+                      '<span expr8="expr8" class="name"> </span><span expr9="expr9"> </span>',
                       [
                         {
                           expressions: [
@@ -8981,8 +8981,8 @@ var Home = {
                           ]
                         },
                         {
-                          redundantAttribute: 'expr9',
-                          selector: '[expr9]',
+                          redundantAttribute: 'expr8',
+                          selector: '[expr8]',
 
                           expressions: [
                             {
@@ -8998,8 +8998,8 @@ var Home = {
                           ]
                         },
                         {
-                          redundantAttribute: 'expr10',
-                          selector: '[expr10]',
+                          redundantAttribute: 'expr9',
+                          selector: '[expr9]',
 
                           expressions: [
                             {
@@ -9020,8 +9020,8 @@ var Home = {
                       ]
                     ),
 
-                    redundantAttribute: 'expr8',
-                    selector: '[expr8]',
+                    redundantAttribute: 'expr7',
+                    selector: '[expr7]',
                     itemName: 'cc',
                     indexName: null,
 
@@ -9033,8 +9033,8 @@ var Home = {
               )
             },
             {
-              redundantAttribute: 'expr11',
-              selector: '[expr11]',
+              redundantAttribute: 'expr10',
+              selector: '[expr10]',
 
               expressions: [
                 {
@@ -9064,8 +9064,8 @@ var Home = {
               ]
             },
             {
-              redundantAttribute: 'expr12',
-              selector: '[expr12]',
+              redundantAttribute: 'expr11',
+              selector: '[expr11]',
 
               expressions: [
                 {
@@ -9083,8 +9083,8 @@ var Home = {
         )
       },
       {
-        redundantAttribute: 'expr13',
-        selector: '[expr13]',
+        redundantAttribute: 'expr12',
+        selector: '[expr12]',
 
         expressions: [
           {
@@ -9104,15 +9104,15 @@ var Home = {
       {
         type: bindingTypes.IF,
         evaluate: _scope => _scope.state.history?.length > 0,
-        redundantAttribute: 'expr14',
-        selector: '[expr14]',
+        redundantAttribute: 'expr13',
+        selector: '[expr13]',
 
         template: template(
-          '<br/>\n          [\n            <span expr15="expr15">\n              clear\n            </span>\n           ]\n        ',
+          '<br/>\n          [\n            <span expr14="expr14">\n              clear\n            </span>\n           ]\n        ',
           [
             {
-              redundantAttribute: 'expr15',
-              selector: '[expr15]',
+              redundantAttribute: 'expr14',
+              selector: '[expr14]',
 
               expressions: [
                 {
@@ -9131,11 +9131,11 @@ var Home = {
         condition: null,
 
         template: template(
-          '<a expr17="expr17" target="_blank"> </a><span><span expr18="expr18"> x </span></span>',
+          '<a expr16="expr16" target="_blank"> </a><span><span expr17="expr17"> x </span></span>',
           [
             {
-              redundantAttribute: 'expr17',
-              selector: '[expr17]',
+              redundantAttribute: 'expr16',
+              selector: '[expr16]',
 
               expressions: [
                 {
@@ -9171,8 +9171,8 @@ var Home = {
               ]
             },
             {
-              redundantAttribute: 'expr18',
-              selector: '[expr18]',
+              redundantAttribute: 'expr17',
+              selector: '[expr17]',
 
               expressions: [
                 {
@@ -9185,8 +9185,8 @@ var Home = {
           ]
         ),
 
-        redundantAttribute: 'expr16',
-        selector: '[expr16]',
+        redundantAttribute: 'expr15',
+        selector: '[expr15]',
         itemName: 'h',
         indexName: null,
         evaluate: _scope => _scope.state.history
@@ -9194,8 +9194,8 @@ var Home = {
       {
         type: bindingTypes.IF,
         evaluate: _scope => _scope.state.history.length === 0,
-        redundantAttribute: 'expr19',
-        selector: '[expr19]',
+        redundantAttribute: 'expr18',
+        selector: '[expr18]',
 
         template: template(
           '\n      No history yet.\n    ',
@@ -9236,11 +9236,11 @@ var NotFound = {
     bindingTypes,
     getComponent
   ) => template(
-    '<h1>Page not found</h1><p>Opsi, wrong page. Go back to <a expr5="expr5"> </a> :(</p>',
+    '<h1>Page not found</h1><p>Opsi, wrong page. Go back to <a expr19="expr19"> </a> :(</p>',
     [
       {
-        redundantAttribute: 'expr5',
-        selector: '[expr5]',
+        redundantAttribute: 'expr19',
+        selector: '[expr19]',
 
         expressions: [
           {
@@ -10676,7 +10676,7 @@ var App = {
         slots: [
           {
             id: 'default',
-            html: '<header><img width="60" height="60" src="./src/images/phone.png" alt="Phone Logo"/>\n      +\n      <img width="75" height="76" src="./src/images/whatsapp.png" alt="Whatsapp Logo"/></header><nav><a expr1="expr1"></a></nav><not-found expr2="expr2"></not-found><main><route expr3="expr3"></route></main>',
+            html: '<header><img height="76" src="./src/images/p+w_.png" alt="Whatsapp Logo"/></header><nav><a expr1="expr1"></a></nav><not-found expr2="expr2"></not-found><main><route expr3="expr3"></route></main>',
 
             bindings: [
               {
